@@ -3,7 +3,7 @@ package Crypt::OpenSSL::Verify;
 use strict;
 use warnings;
 
-require 5.010;
+require 5.008;
 
 our $VERSION = '0.26';
 
