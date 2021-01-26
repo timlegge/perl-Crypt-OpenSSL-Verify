@@ -2,8 +2,6 @@
 #include "perl.h"
 #include "XSUB.h"
 #define NEED_mg_findext
-#define NEED_newRV_noinc
-#define NEED_sv_2pv_flags
 #include "ppport.h"
 
 #include <openssl/asn1.h>
@@ -125,25 +123,25 @@ static int cb1(ok, ctx)
     int count;
     int i;
 
-    //printf("Callback pointer: %p\n", ctx);
-    //printf("Callback INT of pointer %lu\n", (unsigned long) PTR2IV(ctx));
+    /*printf("Callback pointer: %p\n", ctx); */
+    /*printf("Callback INT of pointer %lu\n", (unsigned long) PTR2IV(ctx)); */
     ENTER;
     SAVETMPS;
 
     PUSHMARK(SP);
     EXTEND(SP, 2);
 
-    PUSHs(newSViv(ok));                 // Pass ok as integer on the stack
-    PUSHs(newSViv(PTR2IV(ctx)));        // Pass pointer address as integer
+    PUSHs(newSViv(ok));                 /* Pass ok as integer on the stack */
+    PUSHs(newSViv(PTR2IV(ctx)));        /* Pass pointer address as integer */
     PUTBACK;
 
-    count = call_sv(callback, G_SCALAR);  // Call the verify_callback()
+    count = call_sv(callback, G_SCALAR);  /* Call the verify_callback() */
 
     SPAGAIN;
     if (count != 1)
         croak("ERROR - Perl callback returned more than one value\n");
 
-    i = POPi;   // Get the return code from Perl verify_callback()
+    i = POPi;   /* Get the return code from Perl verify_callback() */
     PUTBACK;
     FREETMPS;
     LEAVE;
@@ -173,7 +171,7 @@ static const char *ctx_error(X509_STORE_CTX * ctx)
     return X509_verify_cert_error_string(X509_STORE_CTX_get_error(ctx));
 }
 
-// Taken from p5-Git-Raw
+/* Taken from p5-Git-Raw */
 STATIC HV *ensure_hv(SV *sv, const char *identifier) {
     if (!SvROK(sv) || SvTYPE(SvRV(sv)) != SVt_PVHV)
     croak("Invalid type for '%s', expected a hash", identifier);
@@ -266,7 +264,7 @@ SV * new(class, ...)
         SV *CApath = NULL;
         int noCApath = 0;
         int noCAfile = 0;
-        int strict_certs = 1; // Default is strict openSSL verify
+        int strict_certs = 1; /* Default is strict openSSL verify */
         SV * store = newSV(0);
 
     CODE:
@@ -274,7 +272,7 @@ SV * new(class, ...)
 
         if (items > 1) {
             if (ST(1) != NULL) {
-                // TODO: ensure_string_sv
+                /* TODO: ensure_string_sv */
                 CAfile = ST(1);
                 if (strlen(SvPV_nolen(CAfile)) == 0) {
                     CAfile = NULL;
@@ -367,8 +365,8 @@ SV * new(class, ...)
 
         RETVAL = sv_bless( self, gv_stashpv( class, 0 ) );
 
-        // Empty the currect thread error queue
-        // https://www.openssl.org/docs/man1.1.1/man3/ERR_clear_error.html
+        /* Empty the currect thread error queue */
+        /* https://www.openssl.org/docs/man1.1.1/man3/ERR_clear_error.html */
         ERR_clear_error();
 
     OUTPUT:
@@ -433,12 +431,12 @@ int verify(self, x509)
         SV **svp;
         MAGIC* mg;
         X509_STORE * store = NULL;
-        //bool strict_certs = 1;
-        //struct OPTIONS trust_options;
-        //trust_options.trust_expired = 0;
-        //trust_options.trust_no_local = 0;
-        //trust_options.trust_onelogin = 0r
-        //
+        /*bool strict_certs = 1; */
+        /*struct OPTIONS trust_options; */
+        /*trust_options.trust_expired = 0; */
+        /*trust_options.trust_no_local = 0; */
+        /*trust_options.trust_onelogin = 0r */
+        /* */
 
         if (x509 == NULL)
             croak("no cert to verify");
@@ -466,39 +464,39 @@ int verify(self, x509)
 
         RETVAL = X509_verify_cert(csc);
 
-        //if (hv_exists(self, "strict_certs", strlen("strict_certs"))) {
-        //    svp = hv_fetch(self, "strict_certs", strlen("strict_certs"), 0);
-        //    if (SvIOKp(*svp)) {
-        //        strict_certs = SvIV(*svp);
-        //    }
-        //}
-        //if (hv_exists(self, "trust_expired", strlen("trust_expired"))) {
-        //    svp = hv_fetch(self, "trust_expired", strlen("trust_expired"), 0);
-        //    if (SvIOKp(*svp)) {
-        //        trust_options.trust_expired = SvIV(*svp);
-        //    }
-        //}
-        //if (hv_exists(self, "trust_onelogin", strlen("trust_onelogin"))) {
-        //    svp = hv_fetch(self, "trust_onelogin", strlen("trust_onelogin"), 0);
-        //    if (SvIOKp(*svp)) {
-        //        trust_options.trust_onelogin = SvIV(*svp);
-        //    }
-        //}
-        //if (hv_exists(self, "trust_no_local", strlen("trust_no_local"))) {
-        //    svp = hv_fetch(self, "trust_no_local", strlen("trust_no_local"), 0);
-        //    if (SvIOKp(*svp)) {
-        //        trust_options.trust_no_local = SvIV(*svp);
-        //    }
-        //}
-        //
-        //This actually does not accomplish what we want as it essentially
-        //checks only the last certificate not the chain that might have
-        //acceptable errors.  Original code considered errors on this last
-        //certificate as real errors.
-        //if ( !RETVAL && !strict_certs ) {
-        //    int cb = verify_cb(&trust_options, RETVAL, csc);
-        //    RETVAL = cb;
-        //}
+        /*if (hv_exists(self, "strict_certs", strlen("strict_certs"))) { */
+        /*    svp = hv_fetch(self, "strict_certs", strlen("strict_certs"), 0); */
+        /*    if (SvIOKp(*svp)) { */
+        /*        strict_certs = SvIV(*svp); */
+        /*    } */
+        /*} */
+        /*if (hv_exists(self, "trust_expired", strlen("trust_expired"))) { */
+        /*    svp = hv_fetch(self, "trust_expired", strlen("trust_expired"), 0); */
+        /*    if (SvIOKp(*svp)) { */
+        /*        trust_options.trust_expired = SvIV(*svp); */
+        /*    } */
+        /*} */
+        /*if (hv_exists(self, "trust_onelogin", strlen("trust_onelogin"))) { */
+        /*    svp = hv_fetch(self, "trust_onelogin", strlen("trust_onelogin"), 0); */
+        /*    if (SvIOKp(*svp)) { */
+        /*        trust_options.trust_onelogin = SvIV(*svp); */
+        /*    } */
+        /*} */
+        /*if (hv_exists(self, "trust_no_local", strlen("trust_no_local"))) { */
+        /*    svp = hv_fetch(self, "trust_no_local", strlen("trust_no_local"), 0); */
+        /*    if (SvIOKp(*svp)) { */
+        /*        trust_options.trust_no_local = SvIV(*svp); */
+        /*    } */
+        /*} */
+        /* */
+        /*This actually does not accomplish what we want as it essentially */
+        /*checks only the last certificate not the chain that might have */
+        /*acceptable errors.  Original code considered errors on this last */
+        /*certificate as real errors. */
+        /*if ( !RETVAL && !strict_certs ) { */
+        /*    int cb = verify_cb(&trust_options, RETVAL, csc); */
+        /*    RETVAL = cb; */
+        /*} */
 
         if (!RETVAL)
             croak("verify: %s", ctx_error(csc));
