@@ -84,7 +84,7 @@ author_requires 'Test::Pod' => '1.14';
 author_requires 'Test::Pod::Coverage' => '1.04';
 
 test_requires 'Test::More' => '0.88';
-test_requires 'File::Slurp';
+test_requires 'File::Slurper';
 test_requires 'Test::Exception';
 
 resources
