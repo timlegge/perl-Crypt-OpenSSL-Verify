@@ -10,3 +10,4 @@ Crypt-OpenSSL-Verify-*
 Makefile.old
 MANIFEST.bak
 SIGNATURE
+Release-*
