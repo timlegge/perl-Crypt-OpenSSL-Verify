@@ -76,9 +76,10 @@ my %WriteMakefileArgs = (
     "Crypt::OpenSSL::X509" => 0
   },
   "TEST_REQUIRES" => {
-    "File::Slurper" => "0.012"
+    "File::Slurper" => "0.012",
+    "Test::Exception" => 0
   },
-  "VERSION" => "0.30",
+  "VERSION" => "0.31",
   "test" => {
     "TESTS" => "t/*.t t/author/*.t"
   }
@@ -91,7 +92,8 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Crypt::OpenSSL::X509" => 0,
-  "File::Slurper" => "0.012"
+  "File::Slurper" => "0.012",
+  "Test::Exception" => 0
 );
 
 unless ( eval { ExtUtils::MakeMaker->VERSION('6.63_03') } ) {
