@@ -199,7 +199,7 @@ Arguments:
 Called directly by OpenSSL and in the case of an acceptable error will
 change the response to 1 to signify no error
 
-Arguements:
+Arguments:
 
   $ok - Error (0) or Success (1) from the OpenSSL certificate verification
         results
