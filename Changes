@@ -2,15 +2,25 @@ Version History
 
 {{$NEXT}}
 
+0.30 -- Mon Feb 21 19:41:54 AST 2022
+
+    - 0c38370 Update version for release
+    - 2861479 Cert had expired and was not considered an error
+    - 9027323 Move to Dist::Zilla
+    - 5000fa1 Spelling fix
+    - cd8c00a Add META.json to the distribution
+    - 583d265 Move from File::Slurp to File::Slurper
+    - 499965b (tag: 0.29) Add SIGNATURE to MANIFEST
+
 0.29 2021-06-07
-    TBD     Update version and changes
+    b15fdcc Update Version and Changes
     0c51bec Croak message text changed
 
 0.28
 
     No code changes just fix incorrect version in META.yml
 
-    TBD     Update Version and Changes
+    3a7f692 (tag: 0.28) Update Version and Changes
     e42edee Increment missing version in META.yml
 
 0.27
