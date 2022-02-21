@@ -2,6 +2,13 @@ Version History
 
 {{$NEXT}}
 
+0.31 -- Mon Feb 21 19:50:52 AST 2022
+
+    - 405b547 .gignore Release-*
+    - 198375d Increment version for release
+    - 6b2797f Missing Dependency
+    - 0185c4c (tag: 0.30) v0.30
+
 0.30 -- Mon Feb 21 19:41:54 AST 2022
 
     - 0c38370 Update version for release
