@@ -2,6 +2,16 @@ Version History
 
 {{$NEXT}}
 
+0.32 -- Tue Feb 22 16:32:14 AST 2022
+
+    - 335c352 Update version for release
+    - f962158 Fix Bug Tracker and Spelling issue
+    - 76eb50f Merge pull request #14 from perl-net-saml2/github-test
+    - c659bda Add Windows github tests
+    - 8a547c9 Updating linux github tests
+    - 6ba8f5c Add Github tests for macOS
+    - b1a9dec (tag: 0.31) v0.31
+
 0.31 -- Mon Feb 21 19:50:52 AST 2022
 
     - 405b547 .gignore Release-*
