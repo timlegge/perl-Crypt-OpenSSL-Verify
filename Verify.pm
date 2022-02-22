@@ -239,7 +239,7 @@ Based on the Original Crypt::OpenSSL::VerifyX509 by
 
 =back
 
-=head1 LICENCE
+=head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as OpenSSL and is covered by the dual
