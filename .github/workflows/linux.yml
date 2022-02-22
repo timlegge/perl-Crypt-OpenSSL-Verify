@@ -25,12 +25,16 @@ jobs:
       image: perl:${{ matrix.perl-version }}
     steps:
       - uses: actions/checkout@v1
+      - name: uses install-with-cpanm
+        uses: perl-actions/install-with-cpanm@v1
+        with:
+          cpanfile: "cpanfile"
+          sudo: false
       - name: Install Dependencies
         run: |
-          curl -sL https://cpanmin.us/ | perl - -nq --with-develop --installdeps .
+          apt-get install make gcc libssl-dev;
       - name: Build Module
         run: |
-          apt-get install make gcc libssl-dev;
           perl Makefile.PL;
           make
       - name: Run Tests
