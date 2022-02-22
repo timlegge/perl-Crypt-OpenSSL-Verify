@@ -141,7 +141,7 @@ Based on the Original Crypt::OpenSSL::VerifyX509 by
 
 - Copyright 2010 Chris Andrews <chrisandrews@venda.com>
 
-# LICENCE
+# LICENSE
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as OpenSSL and is covered by the dual
