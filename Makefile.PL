@@ -57,7 +57,7 @@ if ($Config{gccversion} =~ /llvm/i) {
 }
 
 if ($Config{myuname} =~ /sunos|solaris/i) {
-  # Any SunStudio flags?
+  $args{OPTIMIZE} = $cc_option_flags;
 } else {
   $args{OPTIMIZE} = $cc_option_flags;
 }
@@ -79,7 +79,7 @@ my %WriteMakefileArgs = (
     "File::Slurper" => "0.012",
     "Test::Exception" => 0
   },
-  "VERSION" => "0.33",
+  "VERSION" => "0.34",
   "test" => {
     "TESTS" => "t/*.t t/author/*.t"
   }

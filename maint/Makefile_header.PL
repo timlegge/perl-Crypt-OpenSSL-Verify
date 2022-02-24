@@ -47,7 +47,7 @@ if ($Config{gccversion} =~ /llvm/i) {
 }
 
 if ($Config{myuname} =~ /sunos|solaris/i) {
-  # Any SunStudio flags?
+  $args{OPTIMIZE} = $cc_option_flags;
 } else {
   $args{OPTIMIZE} = $cc_option_flags;
 }
