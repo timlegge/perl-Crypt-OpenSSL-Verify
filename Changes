@@ -2,6 +2,14 @@ Version History
 
 {{$NEXT}}
 
+0.34 -- Wed Feb 23 23:10:26 AST 2022
+
+    [Minor Makefile update for Solaris]
+
+    - 7dc590f (HEAD -> master) Increment Version for release
+    - 4b68830 Solaris needs minimum missing SSL API COMPAT option
+    - a75ad95 (tag: 0.33, origin/master, origin/HEAD) v0.33
+
 0.33 -- Wed Feb 23 20:42:15 AST 2022
 
     [Major updates since 0.29]
