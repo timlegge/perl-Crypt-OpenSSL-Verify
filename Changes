@@ -2,6 +2,24 @@ Version History
 
 {{$NEXT}}
 
+0.33 -- Wed Feb 23 20:42:15 AST 2022
+
+    [Major updates since 0.29]
+
+    - Move build process to Dist::Zilla
+    - Improve GitHub automated tests
+    - Move to File::Slurper for tests
+    - Fix Expired certificate in test
+
+    Thanks to the work of Shoichi Kaji (skaji) on the Crypt::OpenSSL::X509 PR
+    that was the base of the Dist::Zilla and to Jonas Brømsø (jonasbn) for help
+    with improving the tests.
+
+    [Updates since 0.32-TRIAL]
+
+    - 9994958 Update Version for Release
+    - 5b996ec (tag: 0.32) v0.32
+
 0.32 -- Tue Feb 22 16:32:14 AST 2022
 
     - 335c352 Update version for release
