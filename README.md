@@ -134,8 +134,8 @@ The following copyright notice applies to all the files provided in
 this distribution, including binary files, unless explicitly noted
 otherwise.
 
-- Copyright 2020 Timothy Legge
-- Copyright 2020 Wesley Schwengle
+- Copyright 2020-2023 Timothy Legge
+- Copyright 2020-2023 Wesley Schwengle
 
 Based on the Original Crypt::OpenSSL::VerifyX509 by
 
