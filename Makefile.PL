@@ -40,7 +40,7 @@ if ($Config{gccversion} =~ /llvm/i) {
       $cc_option_flags .= ' -Wno-compound-token-split-by-macro';
   }
 
-  if ($Config{perl_version} <= 20) {
+  if ($Config{PERL_VERSION} <= 20) {
     $cc_option_flags .= ' -Wno-error=pointer-bool-conversion';
   }
 }
@@ -69,7 +69,7 @@ my %WriteMakefileArgs = (
     "File::Slurper" => "0.012",
     "Test::Exception" => 0
   },
-  "VERSION" => "0.36",
+  "VERSION" => "0.37",
   "test" => {
     "TESTS" => "t/*.t t/author/*.t"
   }
