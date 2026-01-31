@@ -174,7 +174,7 @@ static const char *ctx_error(X509_STORE_CTX * ctx)
 // Taken from p5-Git-Raw
 STATIC HV *ensure_hv(SV *sv, const char *identifier) {
     if (!SvROK(sv) || SvTYPE(SvRV(sv)) != SVt_PVHV)
-    croak("Invalid type for '%s', expected a hash", identifier);
+        croak("Invalid type for '%s', expected a hash", identifier);
 
     return (HV *) SvRV(sv);
 }
