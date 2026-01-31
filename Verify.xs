@@ -196,7 +196,7 @@ MODULE = Crypt::OpenSSL::Verify    PACKAGE = Crypt::OpenSSL::Verify
 
 PROTOTYPES: DISABLE
 
-#if OPENSSL_API_COMPAT >= 10100
+#if OPENSSL_VERSION_NUMBER >= 10100
 #undef ERR_load_crypto_strings
 #define ERR_load_crypto_strings()    /* nothing */
 #undef OpenSSL_add_all_algorithms
@@ -204,7 +204,7 @@ PROTOTYPES: DISABLE
 #endif
 BOOT:
     ERR_load_crypto_strings();
-#if OPENSSL_API_COMPAT < 10100
+#if OPENSSL_VERSION_NUMBER < 10100
     ERR_load_ERR_strings();
 #endif
     OpenSSL_add_all_algorithms();
@@ -511,7 +511,7 @@ int verify(self, x509)
 
         RETVAL
 
-#if OPENSSL_API_COMPAT >= 10100
+#if OPENSSL_VERSION_NUMBER >= 10100
 void __X509_cleanup(void)
 
     PPCODE:
