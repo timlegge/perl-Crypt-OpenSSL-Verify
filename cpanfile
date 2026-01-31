@@ -17,5 +17,5 @@ on 'develop' => sub {
   requires "Test::CPAN::Meta::JSON" => "0.16";
   requires "Test::Kwalitee" => "1.21";
   requires "Test::Pod" => "1.41";
-  requires "Test::Spelling" => "0.12";
+  requires "Test::Spelling" => "0.17";
 };
