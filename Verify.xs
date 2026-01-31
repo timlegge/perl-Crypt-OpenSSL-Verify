@@ -18,6 +18,7 @@
 #include <openssl/x509_vfy.h>
 
 typedef X509 *Crypt__OpenSSL__X509;
+typedef struct Verify *Crypt__OpenSSL__Verify;
 
 struct OPTIONS {
    bool  trust_expired;
@@ -117,10 +118,7 @@ and returns it to OpenSSL
 
 static SV *callback = (SV *) NULL;
 
-static int cb1(ok, ctx)
-    int ok;
-    IV *ctx;
-{
+static int cb1(int ok, X509_STORE_CTX *ctx) {
     dSP;
     int count;
     int i;
@@ -259,7 +257,7 @@ SV * new(class, ...)
 
         SV * CAfile = NULL;
 
-        HV * options = newHV();
+        HV * options = NULL;
 
         X509_LOOKUP * cafile_lookup = NULL;
         X509_LOOKUP * cadir_lookup = NULL;
@@ -275,8 +273,7 @@ SV * new(class, ...)
 
 
         if (items > 1) {
-            if (ST(1) != NULL) {
-                // TODO: ensure_string_sv
+            if (ST(1) != NULL && SvOK(ST(1))) {
                 CAfile = ST(1);
                 if (strlen(SvPV_nolen(CAfile)) == 0) {
                     CAfile = NULL;
@@ -285,32 +282,35 @@ SV * new(class, ...)
 
             if (items > 2)
                 options = ensure_hv(ST(2), "options");
-
         }
 
-        if (hv_exists(options, "noCAfile", strlen("noCAfile"))) {
-            svp = hv_fetch(options, "noCAfile", strlen("noCAfile"), 0);
-            if (SvIOKp(*svp)) {
-                noCAfile = SvIV(*svp);
+        if (options) {
+            svp = hv_fetch(options, "noCAfile", 8, 0); // 8 is strlen("noCAfile")
+            if (svp && *svp) {
+                if (SvIOKp(*svp)) {
+                    noCAfile = SvIV(*svp);
+                }
             }
-        }
 
-        if (hv_exists(options, "CApath", strlen("CApath"))) {
-            svp = hv_fetch(options, "CApath", strlen("CApath"), 0);
-            CApath = *svp;
-        }
-
-        if (hv_exists(options, "noCApath", strlen("noCApath"))) {
-            svp = hv_fetch(options, "noCApath", strlen("noCApath"), 0);
-            if (SvIOKp(*svp)) {
-                noCApath = SvIV(*svp);
+            svp = hv_fetch(options, "CApath", 6, 0);
+            if (svp && *svp) {
+                if (SvIOKp(*svp)) {
+                    CApath = *svp;
+                }
             }
-        }
 
-        if (hv_exists(options, "strict_certs", strlen("strict_certs"))) {
-            svp = hv_fetch(options, "strict_certs", strlen("strict_certs"), 0);
-            if (SvIOKp(*svp)) {
-                strict_certs = SvIV(*svp);
+            svp = hv_fetch(options, "noCApath", 8, 0);
+            if (svp && *svp) {
+                if (SvIOKp(*svp)) {
+                    noCApath = SvIV(*svp);
+                }
+            }
+
+            svp = hv_fetch(options, "strict_certs", 12, 0);
+            if (svp && *svp) {
+                if (SvIOKp(*svp)) {
+                    strict_certs = SvIV(*svp);
+                }
             }
         }
 
@@ -396,7 +396,7 @@ int ctx_error_code(ctx)
         /* printf("ctx_error_code - int holding pointer: %lu\n", (unsigned long) ctx); */
         /* printf("ctx_error_code - Pointer to ctx: %p\n", (void *) INT2PTR(SV * , ctx)); */
 
-        RETVAL = X509_STORE_CTX_get_error((X509_STORE_CTX *) INT2PTR(SV *, ctx));
+        RETVAL = X509_STORE_CTX_get_error(INT2PTR(X509_STORE_CTX *, ctx));
 
     OUTPUT:
 
