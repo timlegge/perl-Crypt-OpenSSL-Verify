@@ -5,7 +5,9 @@ requires "perl" => "5.008";
 
 on 'test' => sub {
   requires "File::Slurper" => "0.012";
+  requires "File::Temp" => "0";
   requires "Test::Exception" => "0";
+  requires "Test::More" => "0.88";
 };
 
 on 'configure' => sub {
@@ -15,7 +17,11 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Test::CPAN::Meta::JSON" => "0.16";
+  requires "Test::EOL" => "0";
   requires "Test::Kwalitee" => "1.21";
+  requires "Test::NoTabs" => "0";
+  requires "Test::Perl::Critic" => "0";
   requires "Test::Pod" => "1.41";
+  requires "Test::Pod::Coverage" => "1.04";
   requires "Test::Spelling" => "0.17";
 };
