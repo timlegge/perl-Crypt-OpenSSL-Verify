@@ -18,7 +18,7 @@ print "Installed OpenSSL: $major.$minor.$patch\n";
 $args{INC} =  openssl_inc_paths();
 $args{LIBS} = [openssl_lib_paths() . ' -lssl -lcrypto'];
 
-my $cc_option_flags = $major ge 3 ? ' -DOPENSSL_API_COMPAT=30000' : ' -DOPENSSL_API_COMPAT=10100';
+my $cc_option_flags;
 
 if ($Config::Config{cc} =~ /gcc/i) {
   $cc_option_flags .= $ENV{AUTHOR_TESTING} ? ' -Wall -Werror' : ' -Wall';
@@ -40,13 +40,17 @@ if ($Config{gccversion} =~ /llvm/i) {
       $cc_option_flags .= ' -Wno-compound-token-split-by-macro';
   }
 
-  if ($Config{perl_version} <= 20) {
+  if ($Config{PERL_VERSION} <= 20) {
     $cc_option_flags .= ' -Wno-error=pointer-bool-conversion';
   }
 }
 
 if ($Config{myuname} =~ /sunos|solaris/i) {
   $args{OPTIMIZE} = $cc_option_flags;
+} elsif ($Config{myuname} =~ /strawberry-perl/i) {
+  if ($Config{PERL_VERSION} <= 24) {
+    $args{LIBS} = [openssl_lib_paths() . ' -leay32'];
+  }
 } else {
   $args{OPTIMIZE} = $cc_option_flags;
 }
@@ -69,7 +73,7 @@ my %WriteMakefileArgs = (
     "File::Slurper" => "0.012",
     "Test::Exception" => 0
   },
-  "VERSION" => "0.36",
+  "VERSION" => "0.37",
   "test" => {
     "TESTS" => "t/*.t t/author/*.t"
   }
