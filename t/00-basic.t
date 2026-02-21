@@ -1,5 +1,8 @@
 use Test::More;
+use Crypt::OpenSSL::Guess qw/openssl_version/;
 use Crypt::OpenSSL::Verify;
+
+diag(openssl_version);
 use_ok('Crypt::OpenSSL::Verify');
 
 my $v = Crypt::OpenSSL::Verify->new();
