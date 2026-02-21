@@ -267,7 +267,7 @@ SV * new(class, ...)
         int noCApath = 0;
         int noCAfile = 0;
         int strict_certs = 1; // Default is strict openSSL verify
-        SV * store = newSV(0);
+        SV * store_sv = newSV(0);
 
     CODE:
 
@@ -361,11 +361,11 @@ SV * new(class, ...)
 
         SV *const self = newRV_noinc( (SV *)attributes );
 
-        sv_magicext(store, NULL, PERL_MAGIC_ext,
+        sv_magicext(store_sv, NULL, PERL_MAGIC_ext,
             &store_magic, (const char *)x509_store, 0);
 
-        if((hv_store(attributes, "STORE", 5, store, 0)) == NULL)
-            croak("unable to init store");
+        if((hv_store(attributes, "STORE", 5, store_sv, 0)) == NULL)
+            croak("unable to init store_sv");
 
         RETVAL = sv_bless( self, gv_stashpv( class, 0 ) );
 
