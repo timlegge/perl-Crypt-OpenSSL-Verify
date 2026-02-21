@@ -190,7 +190,12 @@ static int ssl_store_destroy(pTHX_ SV* var, MAGIC* magic) {
     return 1;
 }
 
+#ifdef PERL_GLOBAL_STRUCT_PRIVATE
 static const MGVTBL store_magic = { NULL, NULL, NULL, NULL, ssl_store_destroy };
+#else
+static MGVTBL store_magic = { NULL, NULL, NULL, NULL, ssl_store_destroy };
+#endif
+
 
 MODULE = Crypt::OpenSSL::Verify    PACKAGE = Crypt::OpenSSL::Verify
 
