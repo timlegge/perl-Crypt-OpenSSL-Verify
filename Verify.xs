@@ -190,7 +190,12 @@ static int ssl_store_destroy(pTHX_ SV* var, MAGIC* magic) {
     return 1;
 }
 
+#ifdef PERL_GLOBAL_STRUCT_PRIVATE
 static const MGVTBL store_magic = { NULL, NULL, NULL, NULL, ssl_store_destroy };
+#else
+static MGVTBL store_magic = { NULL, NULL, NULL, NULL, ssl_store_destroy };
+#endif
+
 
 MODULE = Crypt::OpenSSL::Verify    PACKAGE = Crypt::OpenSSL::Verify
 
@@ -267,7 +272,7 @@ SV * new(class, ...)
         int noCApath = 0;
         int noCAfile = 0;
         int strict_certs = 1; // Default is strict openSSL verify
-        SV * store = newSV(0);
+        SV * store_sv = newSV(0);
 
     CODE:
 
@@ -317,9 +322,12 @@ SV * new(class, ...)
         x509_store = X509_STORE_new();
 
         if (x509_store == NULL) {
-            X509_STORE_free(x509_store);
             croak("failure to allocate x509 store: %s", ssl_error());
         }
+
+        // IMMEDIATELY attach magic so that if we croak later,
+        // ssl_store_destroy handles the cleanup automatically.
+        sv_magicext(store_sv, NULL, PERL_MAGIC_ext, &store_magic, (const char *)x509_store, 0);
 
         if (!strict_certs)
             X509_STORE_set_verify_cb_func(x509_store, cb1);
@@ -327,12 +335,10 @@ SV * new(class, ...)
         if (CAfile != NULL || !noCAfile) {
             cafile_lookup = X509_STORE_add_lookup(x509_store, X509_LOOKUP_file());
             if (cafile_lookup == NULL) {
-                X509_STORE_free(x509_store);
                 croak("failure to add lookup to store: %s", ssl_error());
             }
             if (CAfile != NULL) {
                 if (!X509_LOOKUP_load_file(cafile_lookup, SvPV_nolen(CAfile), X509_FILETYPE_PEM)) {
-                    X509_STORE_free(x509_store);
                     croak("Error loading file %s: %s\n", SvPV_nolen(CAfile),
                         ssl_error());
                 }
@@ -344,12 +350,10 @@ SV * new(class, ...)
         if (CApath != NULL || !noCApath) {
             cadir_lookup = X509_STORE_add_lookup(x509_store, X509_LOOKUP_hash_dir());
             if (cadir_lookup == NULL) {
-                X509_STORE_free(x509_store);
                 croak("failure to add lookup to store: %s", ssl_error());
             }
             if (CApath != NULL) {
                 if (!X509_LOOKUP_add_dir(cadir_lookup, SvPV_nolen(CApath), X509_FILETYPE_PEM)) {
-                    X509_STORE_free(x509_store);
                     croak("Error loading directory %s\n", SvPV_nolen(CApath));
                 }
             } else {
@@ -361,11 +365,8 @@ SV * new(class, ...)
 
         SV *const self = newRV_noinc( (SV *)attributes );
 
-        sv_magicext(store, NULL, PERL_MAGIC_ext,
-            &store_magic, (const char *)x509_store, 0);
-
-        if((hv_store(attributes, "STORE", 5, store, 0)) == NULL)
-            croak("unable to init store");
+        if((hv_store(attributes, "STORE", 5, store_sv, 0)) == NULL)
+            croak("unable to init store_sv");
 
         RETVAL = sv_bless( self, gv_stashpv( class, 0 ) );
 
@@ -449,13 +450,17 @@ int verify(self, x509)
         if (csc == NULL)
             croak("X.509 store context allocation failed: %s", ssl_error());
 
-        if (!hv_exists(self, "STORE", strlen("STORE")))
+        if (!hv_exists(self, "STORE", strlen("STORE"))) {
+            X509_STORE_CTX_free(csc);
             croak("STORE not found in self!\n");
+        }
 
         svp = hv_fetch(self, "STORE", strlen("STORE"), 0);
 
-        if (!SvMAGICAL(*svp) || (mg = mg_findext(*svp, PERL_MAGIC_ext, &store_magic)) == NULL)
+        if (!SvMAGICAL(*svp) || (mg = mg_findext(*svp, PERL_MAGIC_ext, &store_magic)) == NULL) {
+            X509_STORE_CTX_free(csc);
             croak("STORE is invalid");
+        }
 
         store = (X509_STORE *) mg->mg_ptr;
 
@@ -502,8 +507,11 @@ int verify(self, x509)
         //    RETVAL = cb;
         //}
 
-        if (!RETVAL)
-            croak("verify: %s", ctx_error(csc));
+        if (!RETVAL) {
+            char *err_str = savepv(ctx_error(csc)); // Save error before freeing csc
+            X509_STORE_CTX_free(csc);
+            croak("verify: %s", err_str);
+        }
 
         X509_STORE_CTX_free(csc);
 

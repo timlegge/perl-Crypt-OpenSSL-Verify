@@ -67,7 +67,7 @@ my %WriteMakefileArgs = (
   "MIN_PERL_VERSION" => "5.008",
   "NAME" => "Crypt::OpenSSL::Verify",
   "PREREQ_PM" => {
-    "Crypt::OpenSSL::X509" => 0
+    "Crypt::OpenSSL::X509" => "v2.0.1"
   },
   "TEST_REQUIRES" => {
     "File::Slurper" => "0.012",
@@ -75,7 +75,7 @@ my %WriteMakefileArgs = (
     "Test::Exception" => 0,
     "Test::More" => "0.88"
   },
-  "VERSION" => "0.37",
+  "VERSION" => "0.38",
   "test" => {
     "TESTS" => "t/*.t t/author/*.t"
   }
@@ -87,7 +87,7 @@ my %WriteMakefileArgs = (
 );
 
 my %FallbackPrereqs = (
-  "Crypt::OpenSSL::X509" => 0,
+  "Crypt::OpenSSL::X509" => "2.0.1",
   "File::Slurper" => "0.012",
   "File::Temp" => 0,
   "Test::Exception" => 0,
