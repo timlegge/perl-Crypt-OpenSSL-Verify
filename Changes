@@ -2,6 +2,25 @@ Version History
 
 {{$NEXT}}
 
+0.38 -- Sat Feb 21 15:05:16 AST 2026
+
+    [Changes since 0.36]
+    - Fix a minor memory leak and potential double frees
+    - Add some additional test cases
+    - Fix a couple of issues causing failures on the smokers
+    - Replace the github actions for Linux and Windows (8e7ff45)
+
+    [Detailed Change Log]
+     - 14bd046 The module actually supports 5.008
+     - 03c58de diag the openssl_version in first test
+     - b2fbf7b Increment version number
+     - 27e55aa Avoid potential double frees
+     - aa8950b Clarify store - rename to store_sv
+     - a96d3ee Require latest version of Crypt::OpenSSL::X509
+     - 642a3b9 Bump actions/checkout from 2 to 6
+     - 5d1f712 Add a dependabot for github actions
+     - eab6e70 v0.37
+
 0.37 -- Sun Feb 01 14:08:32 AST 2026
 
     [Changes since 0.36]
